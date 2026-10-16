@@ -1,24 +1,46 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import hero from "@/assets/hero.jpg";
+import { foods } from "@/lib/foods";
+import { FoodGrid } from "@/components/FoodCard";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Foodie India — Taste the Flavours of India" },
+      { name: "description", content: "Discover Biryani, Dosa, Idli, Samosa and Poori with recipes and ingredients." },
+      { property: "og:title", content: "Foodie India" },
+      { property: "og:description", content: "Discover classic Indian dishes, ingredients and recipes." },
+    ],
+  }),
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Home() {
+  const [q, setQ] = useState("");
+  const navigate = useNavigate();
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <section className="hero" style={{ backgroundImage: `url(${hero})` }}>
+        <div className="hero__overlay" />
+        <div className="hero__content">
+          <span className="pill">🇮🇳 Authentic Indian Flavours</span>
+          <h1>Taste the soul of <span className="txt-orange">India</span>, one <span className="txt-green">dish</span> at a time.</h1>
+          <p>From fragrant biryani to crispy dosa — explore classic recipes and their ingredients.</p>
+          <form className="search" onSubmit={(e) => { e.preventDefault(); navigate({ to: "/foods", search: { q } }); }}>
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search Biryani, Dosa, potatoes..." aria-label="Search food" />
+            <button className="btn btn--primary" type="submit">Search</button>
+          </form>
+          <Link to="/scan" className="btn btn--ghost">📷 Find a recipe from a photo</Link>
+        </div>
+      </section>
+      <section className="section">
+        <div className="section__head">
+          <h2>Popular Dishes</h2>
+          <Link to="/foods" search={{ q: "" }} className="link">See all →</Link>
+        </div>
+        <FoodGrid items={foods} />
+      </section>
+    </>
   );
 }

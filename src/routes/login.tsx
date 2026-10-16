@@ -48,7 +48,7 @@ function Login() {
         <form onSubmit={submit} noValidate>
           {(["name", "email", "password"] as const).map((k) => (
             <label key={k}>
-              {k[0].toUpperCase() + k.slice(1)}
+              {k.charAt(0).toUpperCase() + k.slice(1)}
               <input
                 type={k === "name" ? "text" : k}
                 value={form[k]}

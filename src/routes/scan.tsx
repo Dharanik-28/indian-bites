@@ -56,8 +56,9 @@ function Scan() {
       const p: Pred[] = await modelRef.current!.model.predict(imgRef.current);
       p.sort((a, b) => b.probability - a.probability);
       setPreds(p);
-      const food = findFoodByLabel(p[0].className);
-      setStatus(food ? `Looks like ${food.name}!` : `Detected “${p[0].className}” — no recipe in our list yet.`);
+      const top = p[0]?.className ?? "";
+      const food = findFoodByLabel(top);
+      setStatus(food ? `Looks like ${food.name}!` : `Detected “${top}” — no recipe in our list yet.`);
       if (food) setMatch(food);
     } catch (e) {
       setStatus("Couldn't run the model. Check the link and try again.");

@@ -3,7 +3,7 @@ import { searchFoods } from "@/lib/foods";
 import { FoodGrid } from "@/components/FoodCard";
 
 export const Route = createFileRoute("/foods")({
-  validateSearch: (s: Record<string, unknown>) => ({ q: typeof s.q === "string" ? s.q : "" }),
+  validateSearch: (s: Record<string, unknown>) => ({ q: typeof s["q"] === "string" ? (s["q"] as string) : "" }),
   head: () => ({
     meta: [
       { title: "Foods — Foodie India" },
